@@ -3,31 +3,31 @@ const qs = require('querystring')
 const { resolve } = require('path')
 
 // 处理POST数据
-const getPostData =(req) => {
+const getPostData = (req) => {
   const promise = new Promise((resolve, reject) => {
-    if(req.method !== 'POST') {
-      resolve({});
+    if (req.method !== 'POST') {
+      resolve({})
       return
     }
 
-    if(req.headers['content-type'] !== 'application/json') {
-      resolve({});
+    if (req.headers['content-type'] !== 'application/json') {
+      resolve({})
       return
     }
 
-    let postData = '';
+    let postData = ''
     req.on('data', chunk => {
       postData = chunk.toString()
     })
 
     req.on('end', () => {
-      if(!postData) {
+      if (!postData) {
         resolve({})
-        return;
+        return
       }
       resolve(
         JSON.parse(postData)
-      );
+      )
     })
 
   })
@@ -43,33 +43,32 @@ const serverHandler = (req, res) => {
 
   // 获取 path 
   const url = req.url
-  req.path = url.split('?')[0]; // 将 path 封装到请求对象中 
+  req.path = url.split('?')[0] // 将 path 封装到请求对象中 
 
   // 解析 query参数
   req.query = qs.parse(url.split('?')[1])
 
   // 处理post数据
   getPostData(req).then(postData => {
-
     req.body = postData
 
     // 博客路由
-    const blogData = handleBlogRoute(req, res);
-  
+    const blogData = handleBlogRoute(req, res)
+
     if (blogData) {
       res.end(
         JSON.stringify(blogData)
       )
-      return;
+      return
     }
-  
+
     // 处理异常请求
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.writeHead(404, { 'Content-Type': 'text/plain' })
     res.write('404 Not Found')
-    res.end();
+    res.end()
   })
 
 }
 
 // 导出 处理函数
-module.exports = serverHandler;
+module.exports = serverHandler

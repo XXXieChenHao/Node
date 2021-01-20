@@ -1,3 +1,5 @@
+const { SuccessModel } = require("../model/responseModel")
+
 // 与博客相关的方法
 const getList = (author, keyword) => {
   // 从数据库中拿数据
@@ -33,7 +35,30 @@ const getDetail = (id) => {
   }
 }
 
+// 创建博客
+const createNewBlog = (blogData) => {
+  // blog 中的数据存到数据库中
+  console.log(blogData)
+  return {
+    id: 1,
+  }
+}
+
+// 更新博客
+const updateBlog = (blogData = {}) => {
+  console.log(blogData)
+  return true
+}
+
+const deleteBlog = (id) => {
+  console.log(id)
+  return true
+}
+
 module.exports = {
   getList,
-  getDetail
+  getDetail,
+  createNewBlog,
+  updateBlog,
+  deleteBlog
 }
